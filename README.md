@@ -1,5 +1,5 @@
 # AOS_Practice2021_arcadia.youlten
-Semester 2 Advanced Operating Systems Final 
+Semester 2 Advanced Operating Systems Final - Arcadia Youlten
 
 1.Explanation to be able to compile the practice.
 2.Explanation of file systems.

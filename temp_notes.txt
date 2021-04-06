@@ -1,0 +1,28 @@
+Phase 1:
+make an application that is able to analyze and extract part of the information that is encoded in a volume formatted in EXT2 or FAT16
+
+Binary provided that has a disk volume 
+2 parameters: 1) operation to perform 2) binary file (EXT2 or FAT16)
+eg:
+./shooter <operation> <voulme_name>
+
+only consider /info in phase 1
+
+Goals:
+1) detect filesystem volume has 
+2) extract metadata  
+
+minimum error checking 
+
+Phase 2:
+2 parameters per command line: 1) operation (in this case, /find) 2)binary file with disk volume 3) file
+eg:
+./shooter <operation> <volume> <filename>
+
+Goals:
+1) find the file in the root directory of the system and display its size (the (filename))
+
+Phase 3:
+
+Goals:
+1) just like phase 2, except we want to find a file in any directory
