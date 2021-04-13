@@ -1,10 +1,28 @@
 CC=gcc
-CFLAGS=-I.
-DEPS = errors.h
-OBJ = errors.o main.o 
+CXX=g++
+RM=rm -f
+CPPFLAGS=-g $(shell root-config --cflags)
+LDFLAGS=-g $(shell root-config --ldflags)
+LDLIBS=$(shell root-config --libs)
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+SRCS=main.cpp errors.cpp
+OBJS=$(subst .cc,.o,$(SRCS))
 
-main: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+all: tool
+
+tool: $(OBJS)
+	$(CXX) $(LDFLAGS) -o main $(OBJS) $(LDLIBS)
+
+depend: .depend
+
+.depend: $(SRCS)
+	$(RM) ./.depend
+	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
+
+clean:
+	$(RM) $(OBJS)
+
+distclean: clean
+	$(RM) *~ .depend
+
+include .depend

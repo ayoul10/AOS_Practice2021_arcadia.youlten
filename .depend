@@ -1,0 +1,2 @@
+main.o: main.cpp errors.h
+errors.o: errors.cpp errors.h
