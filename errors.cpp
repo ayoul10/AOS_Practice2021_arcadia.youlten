@@ -1,4 +1,9 @@
 #include "errors.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <list>
+#include <vector>
 
 //ext2 --> page 11 smagic
 int command_line_error_check(int argc, char *argv[])
