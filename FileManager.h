@@ -4,7 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-//#include "Disk.h"
+#include "Fat16.h"
+#include "Ext2.h"
+#include "Disk.h"
+
 using namespace std;
 
 #define OFFSET_FAT16 19
@@ -22,5 +25,9 @@ using namespace std;
 #define EXT2 1
 
 int fileTypeCheck(char *filename);
+
+Disk* createObjectFromFile(int filetype);
+
+void showDiskInfo(int filetype, char *filename);
 
 #endif

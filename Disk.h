@@ -6,6 +6,9 @@
 #include <iostream>
 using namespace std;
 
+#define FILESYSTEM_PRINT "------ Filesystem Information ------"
+#define FILESYSTEM_TYPE "Filesystem: "
+
 //object manager class?
 class Disk
 {

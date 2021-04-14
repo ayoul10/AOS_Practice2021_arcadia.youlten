@@ -1,6 +1,5 @@
-#include "errors.h"
+#include "Errors.h"
 
-//ext2 --> page 11 smagic
 int command_line_error_check(int argc, char *argv[])
 {
     int flag = 0;

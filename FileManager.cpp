@@ -1,5 +1,17 @@
 #include "FileManager.h"
 
+Disk *createObjectFromFile(int filetype)
+{
+    if (filetype == FAT16)
+    {
+        return new Fat16;
+    }
+    else
+    {
+        return new Ext2;
+    }
+}
+
 int fileTypeCheck(char *filename)
 {
 
@@ -17,7 +29,6 @@ int fileTypeCheck(char *filename)
 
         if (fat16 != FAT16_FILETYPE)
         {
-            cout << "Filetype is FAT16" << endl;
             return FAT16;
         }
 
@@ -29,7 +40,6 @@ int fileTypeCheck(char *filename)
 
         if (ext2 == EXT2_FILETYPE)
         {
-            cout << "Filetype is EXT2" << endl;
             return EXT2;
         }
         else
@@ -45,4 +55,11 @@ int fileTypeCheck(char *filename)
         cout << "File Failed to Open" << endl;
         return UNKNOWN;
     }
+}
+
+void showDiskInfo(int filetype, char * filename){
+
+    Disk* disk = NULL; 
+    disk = createObjectFromFile(filetype);
+
 }
