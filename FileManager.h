@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "Fat16.h"
-#include "Ext2.h"
-#include "Disk.h"
+//#include "Fat16.h"
+//#include "Ext2.h"
+//#include "Disk.h"
 
 using namespace std;
 
@@ -26,8 +26,9 @@ using namespace std;
 
 int fileTypeCheck(char *filename);
 
+/*
 Disk* createObjectFromFile(int filetype);
 
 void showDiskInfo(int filetype, char *filename);
-
+*/
 #endif

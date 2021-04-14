@@ -1,3 +1,6 @@
-main.o: main.cpp FileManager.h errors.h
-errors.o: errors.cpp errors.h
+main.o: main.cpp FileManager.h Errors.h
+Errors.o: Errors.cpp Errors.h
 FileManager.o: FileManager.cpp FileManager.h
+Ext2.o: Ext2.cpp Ext2.h Disk.h
+Fat16.o: Fat16.cpp Fat16.h Disk.h
+Disk.o: Disk.h

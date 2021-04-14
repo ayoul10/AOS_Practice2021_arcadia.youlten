@@ -1,5 +1,6 @@
 #include "FileManager.h"
 
+/*
 Disk *createObjectFromFile(int filetype)
 {
     if (filetype == FAT16)
@@ -11,7 +12,7 @@ Disk *createObjectFromFile(int filetype)
         return new Ext2;
     }
 }
-
+*/
 int fileTypeCheck(char *filename)
 {
 
@@ -56,10 +57,11 @@ int fileTypeCheck(char *filename)
         return UNKNOWN;
     }
 }
-
+/*
 void showDiskInfo(int filetype, char * filename){
 
     Disk* disk = NULL; 
     disk = createObjectFromFile(filetype);
 
 }
+*/
