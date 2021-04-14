@@ -1,2 +1,3 @@
-main.o: main.cpp errors.h
+main.o: main.cpp FileManager.h errors.h
 errors.o: errors.cpp errors.h
+FileManager.o: FileManager.cpp FileManager.h

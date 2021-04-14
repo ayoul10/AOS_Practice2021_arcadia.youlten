@@ -5,7 +5,7 @@ CPPFLAGS=-g $(shell root-config --cflags)
 LDFLAGS=-g $(shell root-config --ldflags)
 LDLIBS=$(shell root-config --libs)
 
-SRCS=main.cpp errors.cpp
+SRCS=main.cpp errors.cpp FileManager.cpp
 OBJS=$(subst .cc,.o,$(SRCS))
 
 all: tool
