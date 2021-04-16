@@ -8,9 +8,9 @@ LDLIBS=$(shell root-config --libs)
 SRCS=main.cpp Errors.cpp FileManager.cpp
 OBJS=$(subst .cc,.o,$(SRCS))
 
-all: tool
+all: shooter
 
-tool: $(OBJS)
+shooter: $(OBJS)
 	$(CXX) $(LDFLAGS) -o main $(OBJS) $(LDLIBS)
 
 depend: .depend

@@ -31,3 +31,5 @@ Phase 4:
 
 Goals:
 1) find and delete requested file
+
+wsl cmd: /mnt/c/Users/arcad/AOS_Practice_arcadia.youlten/AOS_Practice2021_arcadia.youlten$
