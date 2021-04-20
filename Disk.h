@@ -6,15 +6,11 @@
 #include <iostream>
 using namespace std;
 
-#define FILESYSTEM_PRINT "------ Filesystem Information ------"
-#define FILESYSTEM_TYPE "Filesystem: "
-
-//object manager class?
 class Disk
 {
-public:
-    Disk(void){};
-    virtual void getData(void) = 0;
+
+    virtual void printData() = 0;
+    virtual void setData() = 0;
 };
 
 
