@@ -23,8 +23,6 @@ eg:
 Goals:
 1) find the file in the root directory of the system and display its size (the (filename))
 
-<<<<<<< HEAD
-=======
 Ext2
 we need to use inodes to get some certain information
 Every volume is split in block groups
@@ -41,7 +39,6 @@ if you have checked the documenation, the directory entry structure --> the file
 5 chars for filename, 3 for extension
 
 
->>>>>>> Fat16BranchP1
 Phase 3:
 
 Goals:
@@ -50,10 +47,6 @@ Goals:
 Phase 4:
 
 Goals:
-<<<<<<< HEAD
-1) find and delete requested file
-=======
 1) find and delete requested file
 
 wsl cmd: /mnt/c/Users/arcad/AOS_Practice_arcadia.youlten/AOS_Practice2021_arcadia.youlten$
->>>>>>> Fat16BranchP1

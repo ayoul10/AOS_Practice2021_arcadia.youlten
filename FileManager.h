@@ -4,23 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-<<<<<<< HEAD
-//#include "Fat16.h"
-=======
 #include <cstdio>
 #include <fstream>
 #include "Fat16.h"
->>>>>>> Fat16BranchP1
 //#include "Ext2.h"
 //#include "Disk.h"
 
 using namespace std;
 
-<<<<<<< HEAD
-#define OFFSET_FAT16 19
-=======
 #define OFFSET_FAT16 22
->>>>>>> Fat16BranchP1
 #define SIZE_FAT16 2
 #define ELEMENTS_TO_READ_FAT16 1
 #define FAT16_FILETYPE 0

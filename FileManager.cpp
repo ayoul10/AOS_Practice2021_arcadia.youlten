@@ -118,16 +118,6 @@ int  fileTypeCheck(char *filename)
         return UNKNOWN;
     }
 }
-<<<<<<< HEAD
-/*
-void showDiskInfo(int filetype, char * filename){
-
-    Disk* disk = NULL; 
-    disk = createObjectFromFile(filetype);
-
-}
-*/
-=======
 
 void showDiskInfo(char * filename){
 
@@ -144,4 +134,3 @@ void showDiskInfo(char * filename){
     */
 
     }
->>>>>>> Fat16BranchP1
