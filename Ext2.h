@@ -36,7 +36,7 @@ class Ext2 : public Disk
 {
 public:
     //Disk(void){};
-    virtual void getData(void);
+    void getData(void);
 };
 
 #endif

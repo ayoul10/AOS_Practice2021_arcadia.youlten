@@ -7,19 +7,21 @@
 #include "Disk.h"
 
 using namespace std;
-#define FILESYSTEM_NAME "System Name: "
-#define FILE_SIZE "Size: "
-#define SECTOR_COUNT_CLUSTER "Sectors Per Cluster: "
-#define FAT_COUNT "Number of FATS: "
-#define ROOT_MAX "Max Root Entries: "
-#define SECTOR_COUNT_FAT "Sectors Per Fat: "
-#define LABEL "Label: "
 
 class Fat16 : public Disk
 {
-public:
-   //Disk(void){};
-    virtual void getData(void);
+    public: 
+        void printData() override;
+        void setData() override;
+
+        char *system_name = new char[64];
+        short sector_size;
+        char sectors_per_cluster;
+        char fat_num;
+        short max_root;
+        short sectors_per_fat;
+        short reserved_sec;
+        char *volume_label = new char[88];
 };
 
 #endif

@@ -1,19 +1,80 @@
 #include "FileManager.h"
 
-/*
-Disk *createObjectFromFile(int filetype)
-{
-    if (filetype == FAT16)
-    {
-        return new Fat16;
+Fat16 putFileInfoOnObject(char * filename, int filetype){
+
+    Fat16 fat16;
+    char *system_name = new char[64];
+    short sector_size;
+    char sectors_per_cluster;
+    char fat_num;
+    short max_root;
+    short sectors_per_fat;
+    short reserved_sec;
+    char *volume_label = new char[88];
+
+    FILE *file;
+    //TODO: Decide if i want to 1) create object first, then add fields
+    int i;
+
+    file = fopen(filename, "r");
+
+    if (filetype == FAT16){
+        
+        fseek(file, BS_OEMNAME_OFFSET, SEEK_SET);
+        fread((void *)(fat16.system_name), sizeof(char), BS_OEMNAME_BYTES, file);
+
+        rewind(file);
+        fflush(0);
+
+        fseek(file, BPB_BYTSPERSEC_OFFSET, SEEK_SET);
+        fread(&fat16.sector_size, sizeof(short), 1, file);
+
+        rewind(file);
+        fflush(0);
+
+        fseek(file, BPB_SECPERCLUS_OFFSET, SEEK_SET);
+        fread(&fat16.sectors_per_cluster, sizeof(char), 1, file);
+       
+
+        rewind(file);
+        fflush(0);
+
+        fseek(file, BPB_RSVDSECCNT, SEEK_SET);
+        fread(&fat16.reserved_sec, sizeof(short), 1, file);
+
+        rewind(file);
+        fflush(0);
+
+        fseek(file, BPB_NUMFATS_OFFSET, SEEK_SET);
+        fread(&fat16.fat_num, sizeof(char), 1, file);
+
+        rewind(file);
+        fflush(0);
+
+        fseek(file, BPB_ROOTENTCNT_OFFSET, SEEK_SET);
+        fread(&fat16.max_root, sizeof(short), 1, file);
+        rewind(file);
+        fflush(0);
+
+        fseek(file, OFFSET_FAT16, SEEK_SET);
+        fread(&fat16.sectors_per_fat, sizeof(short), 1, file);
+
+        rewind(file);
+        fflush(0);
+
+        fseek(file, BS_VOLLAB_OFFSET, SEEK_SET);
+        fread((void *)(fat16.volume_label), sizeof(char), BS_VOLLAB_BYTES, file);
+    
     }
-    else
-    {
-        return new Ext2;
+    else{
+        std::cout << "haven't looked at EXT2 yet" << endl;
     }
+    fclose(file);
+
+    return fat16;
 }
-*/
-int fileTypeCheck(char *filename)
+
+int  fileTypeCheck(char *filename)
 {
 
     int filetype;
@@ -57,6 +118,7 @@ int fileTypeCheck(char *filename)
         return UNKNOWN;
     }
 }
+<<<<<<< HEAD
 /*
 void showDiskInfo(int filetype, char * filename){
 
@@ -65,3 +127,21 @@ void showDiskInfo(int filetype, char * filename){
 
 }
 */
+=======
+
+void showDiskInfo(char * filename){
+
+    int filetype = fileTypeCheck(filename);
+    if(filetype == FAT16){
+        
+    Fat16 fat16 = putFileInfoOnObject(filename,filetype);
+    fat16.printData();
+    }
+    /*
+    else{
+
+    }
+    */
+
+    }
+>>>>>>> Fat16BranchP1

@@ -13,6 +13,7 @@ Goals:
 2) extract metadata  
 
 minimum error checking 
+TODO: Interface for FAT16 and EXT2
 
 Phase 2:
 2 parameters per command line: 1) operation (in this case, /find) 2)binary file with disk volume 3) file
@@ -22,6 +23,25 @@ eg:
 Goals:
 1) find the file in the root directory of the system and display its size (the (filename))
 
+<<<<<<< HEAD
+=======
+Ext2
+we need to use inodes to get some certain information
+Every volume is split in block groups
+every x bytes, there's a block group (fixed size)
+each block has a specific pattern of information in it
+We have to read the info from the super block
+group descriptors --> tells you where each part of the information in the block is
+then you need to go to the inode table, and the split up the information 
+first inode is the same for each block 
+inode 11 is only on the first block --> blockgroup 0
+
+FAT16
+if you have checked the documenation, the directory entry structure --> the file names only have 8 chars --> fat 16 limitation
+5 chars for filename, 3 for extension
+
+
+>>>>>>> Fat16BranchP1
 Phase 3:
 
 Goals:
@@ -30,4 +50,10 @@ Goals:
 Phase 4:
 
 Goals:
+<<<<<<< HEAD
 1) find and delete requested file
+=======
+1) find and delete requested file
+
+wsl cmd: /mnt/c/Users/arcad/AOS_Practice_arcadia.youlten/AOS_Practice2021_arcadia.youlten$
+>>>>>>> Fat16BranchP1

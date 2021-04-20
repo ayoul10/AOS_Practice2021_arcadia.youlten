@@ -6,11 +6,6 @@ using namespace std;
 
 #include "FileManager.h"
 #include "Errors.h"
-/*
-#include "Fat16.h"
-#include "Ext2.h"
-#include "Disk.h"
-*/
 
 int main(int argc, char *argv[])
 {
@@ -22,13 +17,8 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "We're inside the program" << endl;
-
-        //filetype = fileTypeCheck(argv[2]);
-
-        //showDiskInfo(filetype, argv[2]);
-        //disk_object = createObjectFromFile(filetype);
-                
+        showDiskInfo(argv[2]);
+   
     }
 
     return 0;

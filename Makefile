@@ -1,28 +1,14 @@
-CC=gcc
-CXX=g++
-RM=rm -f
-CPPFLAGS=-g $(shell root-config --cflags)
-LDFLAGS=-g $(shell root-config --ldflags)
-LDLIBS=$(shell root-config --libs)
+CC=g++
+CFLAGS= -I -g -Wall -Wextra -ggdb3 -lpthread
+DEPS = FileManager.h FileManager.cpp Fat16.cpp Fat16.h main.cpp Disk.h Errors.h Errors.c
+OBJ = main.o FileManager.o Fat16.o Errors.o
 
-SRCS=main.cpp Errors.cpp FileManager.cpp
-OBJS=$(subst .cc,.o,$(SRCS))
+%.o: %.c $(DEPS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-all: tool
+shooter: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
 
-tool: $(OBJS)
-	$(CXX) $(LDFLAGS) -o main $(OBJS) $(LDLIBS)
-
-depend: .depend
-
-.depend: $(SRCS)
-	$(RM) ./.depend
-	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
-
+.PHONY: clean
 clean:
-	$(RM) $(OBJS)
-
-distclean: clean
-	$(RM) *~ .depend
-
-include .depend
+	-rm edit $(objects)
