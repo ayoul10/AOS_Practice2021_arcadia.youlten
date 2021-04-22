@@ -6,15 +6,16 @@
 #include <iostream>
 #include <cstdio>
 #include <fstream>
+#include <string.h>
 #include "Fat16.h"
 #include "Ext2.h"
 
 using namespace std;
 
-#define OFFSET_FAT16 22
-#define SIZE_FAT16 2
+#define FAT16_FILE_OFFSET 54
+#define FAT16_FILE_READ 8
 #define ELEMENTS_TO_READ_FAT16 1
-#define FAT16_FILETYPE 0
+#define FAT16_FILETYPE "FAT16   "
 
 #define OFFSET_EXT2 1080
 #define SIZE_EXT2 2
@@ -41,6 +42,8 @@ using namespace std;
 #define BPB_RSVDSECCNT_BYTES 2
 #define BS_VOLLAB_OFFSET 43
 #define BS_VOLLAB_BYTES 11
+#define OFFSET_FAT16 22
+#define SIZE_FAT16 2
 
 //================== EXT2 Defines =========================
 #define SUPERBLOCK 1024

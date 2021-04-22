@@ -44,12 +44,7 @@ class Ext2 : public Disk
 
     public:
         void printData() override;
-        void setData() override;
-/*
-        char* lastwrite = new char[4];
-        char *lastcheck = new char[4];
-        char *lastmount  = new char[4];
-*/
+
         int lastwrite;
         int lastcheck;
         int lastmount;

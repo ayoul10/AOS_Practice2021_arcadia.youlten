@@ -13,7 +13,8 @@
 
 void Fat16::printData()
 {
-    Fat16 f;
+    std::cout << FILESYSTEM_PRINT << endl;
+    std::cout << FILESYSTEM_TYPE << "FAT16" << endl;
     std::cout << FILESYSTEM_NAME << this->system_name << endl;
     cout << SECTOR_SIZE << this->sector_size << endl;
     printf("%s", SECTOR_COUNT_CLUSTER);
@@ -25,9 +26,4 @@ void Fat16::printData()
     printf("%s", SECTOR_COUNT_FAT);
     printf("%i\n", this->sectors_per_fat);
     std::cout << LABEL << this->volume_label << endl;
-}
-void Fat16::setData()
-{
-
-    cout << "We're getting fat16 data" << endl;
 }

@@ -1,19 +1,11 @@
 #include "FileManager.h"
 
-Fat16 putFileInfoOnObject(char * filename){
+Fat16 putFileInfoOnObjectFat16(char *filename)
+{
 
     Fat16 fat16;
-    char *system_name = new char[64];
-    short sector_size;
-    char sectors_per_cluster;
-    char fat_num;
-    short max_root;
-    short sectors_per_fat;
-    short reserved_sec;
-    char *volume_label = new char[88];
 
     FILE *file;
-    //TODO: Decide if i want to 1) create object first, then add fields
     int i;
 
     file = fopen(filename, "r");
@@ -72,7 +64,6 @@ Ext2 putFileInfoOnObjectExt2(char *filename)
     Ext2 ext2;
 
     FILE *file;
-    //TODO: Decide if i want to 1) create object first, then add fields
     int i;
 
     file = fopen(filename, "r");
@@ -177,20 +168,17 @@ Ext2 putFileInfoOnObjectExt2(char *filename)
 
 int fileTypeCheck(char *filename)
 {
-
     int filetype;
     FILE *file;
-    int fat16 = 0;
+    char *fat16string = new char[8];
 
     if (file = fopen(filename, "r"))
     {
-        cout << "Opening " << filename << "..." << endl;
 
-        //check if FAT16
-        fseek(file, OFFSET_FAT16, SEEK_SET);
-        fread(&fat16, SIZE_FAT16, ELEMENTS_TO_READ_FAT16, file);
+        fseek(file, 54, SEEK_SET);
+        fread((void *)(fat16string), sizeof(char), 8, file);
 
-        if (fat16 != FAT16_FILETYPE)
+        if (strcmp(fat16string, "FAT16   ") == 0)
         {
             return FAT16;
         }
@@ -224,13 +212,16 @@ void showDiskInfo(char * filename){
 
     int filetype = fileTypeCheck(filename);
         if(filetype == FAT16){
-            Fat16 fat16 = putFileInfoOnObject(filename);
+            Fat16 fat16 = putFileInfoOnObjectFat16(filename);
             fat16.printData();
         }
-        else{
+        else if (filetype == EXT2){
 
             Ext2 ext2 = putFileInfoOnObjectExt2(filename);
             ext2.printData();
         }
-
-    }
+        else{
+            cout << "Ending Program Due to Errors" << endl;
+        }
+     }
+        

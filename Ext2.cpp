@@ -42,24 +42,4 @@ void Ext2::printData()
     std::cout << VOLUME_LAST << last_mount << endl;
     std::cout << VOLUME_WRITE << last_write << endl;
 
-    /*
-    struct tm ts;
-    char buf[80];
-
-    // Get current time
-    time(&this->lastwrite);
-
-    // Format time, "ddd yyyy-mm-dd hh:mm:ss zzz"
-    ts = *localtime(&this->lastwrite);
-    strftime(buf, sizeof(buf), "%a %Y-%m-%d %H:%M:%S %Z", &ts);
-    printf("%s\n", buf);
-
-    //printf("%s", ctime());
-    
-    */
-}
-void Ext2::setData()
-{
-
-    cout << "We're setting Ext2 data" << endl;
 }
