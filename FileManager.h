@@ -7,8 +7,7 @@
 #include <cstdio>
 #include <fstream>
 #include "Fat16.h"
-//#include "Ext2.h"
-//#include "Disk.h"
+#include "Ext2.h"
 
 using namespace std;
 
@@ -42,6 +41,27 @@ using namespace std;
 #define BPB_RSVDSECCNT_BYTES 2
 #define BS_VOLLAB_OFFSET 43
 #define BS_VOLLAB_BYTES 11
+
+//================== EXT2 Defines =========================
+#define SUPERBLOCK 1024
+#define LASTWRITE 48
+#define LASTCHECK 64
+#define LASTMOUNT 44
+#define VOLUMENAME 120
+#define TOTALINODE 0
+#define INODESGROUP 40
+#define FIRSTINODE 84
+#define INODESIZE 88
+#define FREEINODE 2062
+#define FREEBLOCK 12
+#define BLOCKSIZE 24
+#define RESERVEDBLOCK 8
+#define TOTALBLOCK 4
+#define FIRSTDATABLOCK 20
+#define GROUPBLOCK 32
+#define GROUPFRAG 36 
+#define VOLNAME 16
+
 
 int fileTypeCheck(char *filename);
 void showDiskInfo(char *filename);
