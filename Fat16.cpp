@@ -27,3 +27,8 @@ void Fat16::printData()
     printf("%i\n", this->sectors_per_fat);
     std::cout << LABEL << this->volume_label << endl;
 }
+
+void Fat16::printFileMetaData()
+{
+    std::cout << "Not Implemtented Yet" << endl;
+}

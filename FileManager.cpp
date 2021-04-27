@@ -58,23 +58,22 @@ void showDiskInfo(char * filename){
             cout << "Ending Program Due to Errors" << endl;
         }
     }
-/*
 void findFileonDisk(char * diskname, char * filename){
 
     int filetype = fileTypeCheck(filename);
     if (filetype == FAT16)
     {
-        Fat16 fat16 = putFileInfoOnObjectFat16(filename);
-        fat16.printData();
+        FileFat16::findFat16File(filename, diskname);
+        //fat16.printFileMetaData();
     }
     else if (filetype == EXT2)
     {
 
-        Ext2 ext2 = putFileInfoOnObjectExt2(filename);
-        ext2.printData();
+        FileExt2::findExt2File(filename, diskname);
+        //ext2.printFileMetaData();
     }
     else
     {
         cout << "Ending Program Due to Errors" << endl;
     }
-    */
+}

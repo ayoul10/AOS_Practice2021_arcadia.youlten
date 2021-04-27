@@ -12,6 +12,7 @@ class Fat16 : public Disk
 {
     public: 
         void printData() override;
+        void printFileMetaData() override;
 
         char *system_name = new char[64];
         short sector_size;

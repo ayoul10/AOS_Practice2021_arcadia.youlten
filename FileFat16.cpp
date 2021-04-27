@@ -56,3 +56,8 @@ Fat16 FileFat16::putFileInfoOnObjectFat16(char *filename)
 
     return fat16;
 }
+
+void FileFat16::findFat16File(char *filename, char *diskname)
+{
+    cout << "Not Implemented Yet" << endl;
+}

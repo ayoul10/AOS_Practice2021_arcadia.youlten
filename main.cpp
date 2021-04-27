@@ -23,8 +23,7 @@ int main(int argc, char *argv[])
             showDiskInfo(argv[2]);
         }
         else if (strcmp(argv[1], FIND) == 0){
-            //findFileonDisk(argv[1], argv[2]);
-            cout << "Not Implemented Yet" << endl;
+            findFileonDisk(argv[2], argv[3]);
         }
         else if (strcmp(argv[1], DELETE) == 0){
             cout << "Not Implemented Yet" << endl;

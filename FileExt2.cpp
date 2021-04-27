@@ -106,3 +106,7 @@ Ext2 FileExt2::putFileInfoOnObjectExt2(char *filename)
 
     return ext2;
 }
+void FileExt2::findExt2File(char *filename, char *diskname)
+{
+    cout << "Not implemented Yet" << endl;
+}

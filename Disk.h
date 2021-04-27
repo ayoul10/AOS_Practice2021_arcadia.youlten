@@ -10,6 +10,7 @@ class Disk
 {
 
     virtual void printData() = 0;
+    virtual void printFileMetaData() = 0;
 };
 
 

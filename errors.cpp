@@ -3,7 +3,8 @@
 int command_line_error_check(int argc, char *argv[])
 {
     int flag = 0;
-    std::string command_wanted = "/info";
+    std::string info = "/info";
+    std::string find = "/find";
 
     if (argc < 3)
     {
@@ -11,10 +12,15 @@ int command_line_error_check(int argc, char *argv[])
         return flag = 1;
     }
     //check if we're entering the correct command
-    if (command_wanted.compare(argv[1]) != 0)
+    if ((info.compare(argv[1]) == 0) || (find.compare(argv[1]) == 0))
     {
+        return flag =0;
+    }
+    else{
+
         cout << "Unknown Command." << endl;
         cout << "Try entering /info" << endl;
         return flag = 1;
     }
 }
+

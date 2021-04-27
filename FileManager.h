@@ -30,5 +30,6 @@ using namespace std;
 
 int fileTypeCheck(char *filename);
 void showDiskInfo(char *filename);
+void findFileonDisk(char *diskname, char *filename);
 
 #endif
