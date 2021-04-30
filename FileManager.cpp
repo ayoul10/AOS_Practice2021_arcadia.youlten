@@ -60,20 +60,25 @@ void showDiskInfo(char * filename){
     }
 void findFileonDisk(char * diskname, char * filename){
 
-    int filetype = fileTypeCheck(filename);
+    int filetype = fileTypeCheck(diskname);
     if (filetype == FAT16)
     {
         FileFat16::findFat16File(filename, diskname);
-        //fat16.printFileMetaData();
     }
     else if (filetype == EXT2)
     {
 
         FileExt2::findExt2File(filename, diskname);
-        //ext2.printFileMetaData();
     }
     else
     {
         cout << "Ending Program Due to Errors" << endl;
+    }
+}
+
+void cleanString(char *string){
+
+    for(int i=0; i<sizeof(string); i++){
+        string[i] = '\0';
     }
 }

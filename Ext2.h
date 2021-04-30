@@ -44,7 +44,6 @@ class Ext2 : public Disk
 
     public:
         void printData() override;
-        void printFileMetaData() override;
 
         int lastwrite;
         int lastcheck;
