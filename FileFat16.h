@@ -9,9 +9,11 @@
 #include <cstdio>
 #include <fstream>
 #include <string.h>
+#include <strings.h>
 #include "FileManager.h"
 using namespace std;
 
+//=============== INFO DEFINES ================================
 #define BS_OEMNAME_OFFSET 3
 #define BS_OEMNAME_BYTES 8
 #define BPB_BYTSPERSEC_OFFSET 11
@@ -28,6 +30,13 @@ using namespace std;
 #define BS_VOLLAB_BYTES 11
 #define OFFSET_FAT16 22
 #define SIZE_FAT16 2
+
+//===================== FIND DEFINES ============================
+#define MAX_ROOT_DIRECTORY 512
+#define MAX_DIRECTORY_ENTRY 32
+#define FILE_SIZE_OFFSET 16
+#define FILE_SIZE_SIZE 4
+
 class FileFat16
 {
 public:

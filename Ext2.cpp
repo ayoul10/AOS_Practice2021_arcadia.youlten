@@ -12,11 +12,6 @@ std::string convertDateTime(int ttc){
     return std::string(string);
 }
 
-void Ext2::printFileMetaData(){
-
-    std::cout << "Not Implemtented Yet" << endl;
-}
-
 void Ext2::printData()
 {
     int blocksize = 1024 << this->blocksize;
