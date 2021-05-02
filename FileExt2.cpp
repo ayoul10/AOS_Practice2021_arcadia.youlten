@@ -153,6 +153,7 @@ void FileExt2::findExt2File(char *filename, char *diskname)
     int file_offset = root_inode_block * numerical_block_size;
 
     //we're at the start of the file
+    int test;
     int inode;
     short rec_length;
     char name_len;
