@@ -72,7 +72,7 @@ void FileFat16::findFat16File(char *filename, char *diskname)
 {
     Fat16 f = FileFat16::putFileInfoOnObjectFat16(diskname);
     FILE *disk;
-    int i=63;
+    int i = 64;
     int filesize;
     int flag = 0;
     int dot = 0;
@@ -82,8 +82,7 @@ void FileFat16::findFat16File(char *filename, char *diskname)
     char fileextension[3];
     char namewithextension[13];
 
-     //conver filename to upper case so we can compare it
-
+    //conver filename to upper case so we can compare it
 
     for (int j = 0; filename[j] != '\0'; j++)
     {
@@ -95,56 +94,63 @@ void FileFat16::findFat16File(char *filename, char *diskname)
 
     disk = fopen(diskname, "r");
 
-        while (filewewant[0] != 0x00)
+    while (filewewant[0] != 0x00)
+    {
+        int j = 0;
+        int k = 0;
+        dot = 0;
+        //clean strings
+        cleanString(namewithextension);
+        cleanString(fileextension);
+        cleanString(filewewant);
+
+        fseek(disk, firstrootdirsecnum + (i), SEEK_SET);
+        fread(filewewant, sizeof(char), 8, disk);
+        fread(fileextension, sizeof(char), 3, disk);
+
+        j=0;
+        k=0;
+        for (int j = 0; j < 12; j++)
         {
-            int j=0;
-            int k=0;
-            dot = 0;
-            //clean strings
-            cleanString(namewithextension);
-            cleanString(fileextension);
-            cleanString(filewewant);
-           
-            fseek(disk, firstrootdirsecnum + (i + 1), SEEK_SET);
-            fread(filewewant, sizeof(char), 8, disk);
-            fread(fileextension, sizeof(char), 3, disk);
-            for (int j = 0; j < 12; j++)
+            if (j < 8 && (filewewant[j] != ' '))
             {
-                if (j < 8 && filewewant[j] != ' ')
-                {
-                    namewithextension[j] = filewewant[j];
-                }
-                else if (dot != 1 && (j == 8 || filewewant[j] == ' '))
-                {
-                    namewithextension[j] = '.';
-                    dot = 1;
-                }
-                else if (k < 3 && fileextension[k] != ' ')
-                {
-                    namewithextension[j] = fileextension[k];
-                    k++;
-                }
+                namewithextension[j] = filewewant[j];
             }
-
-            j = 0;
-            k = 0;
-            
-            if (strcmp(filename, namewithextension) == 0)
+            //if we haven't put a dot, and we've found a space, or we're at the max value for the name
+            else if (dot != 1 && (j == 8 || filewewant[j] == ' '))
             {
-                fseek(disk, FILE_SIZE_OFFSET + 1, SEEK_CUR);
-                fread(&filesize, sizeof(int), 1, disk);
-
-                printf("File Found. it has %d number of bytes\n", filesize);
-                flag = 1;
-                break;
+                namewithextension[j] = '.';
+                dot = 1;
             }
+            else if (k < 3 && fileextension[k] != ' ')
+            {
+                namewithextension[j] = fileextension[k];
+                k++;
+            }
+            else if(k == 3 || fileextension[k] == ' ' || fileextension[k] == '\0'){
+                namewithextension[j] = '\0';
+            }
+        }
 
-            i += 64; //32 or 64 works?????
+        j = 0;
+        k = 0;
 
-            rewind(disk);
+        if (strcmp(filename, namewithextension) == 0)
+        {
+            fseek(disk, FILE_SIZE_OFFSET + 1, SEEK_CUR);
+            fread(&filesize, sizeof(int), 1, disk);
 
+            printf("File Found. it has %d number of bytes\n", filesize);
+            flag = 1;
+            break;
+        }
+
+        i += 64; //32 or 64 works?????
+
+        rewind(disk);
     }
-    if(flag == 0){
+    if (flag == 0)
+    {
         std::cout << "Could not find file on disk" << endl;
     }
 }
