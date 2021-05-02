@@ -137,10 +137,7 @@ void FileExt2::findExt2File(char *filename, char *diskname)
     int inode_table_start = bg_inode_table * numerical_block_size;
     int root_inode_offset = (f.firstinode-1) * f.inodesize;
     //for now, this works since we're in the root directory
-    //int root_inode_offset = (2- 1) * f.inodesize;
-
-    //cout << "Offset we're looking at:  " << inode_table_start + root_offset << endl;
-
+    //int root_inode_offset = (2- 1) * f.inodesize;t
     int root_inode_block;
     int blocks_for_inode;
 
