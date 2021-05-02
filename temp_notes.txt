@@ -1,19 +1,8 @@
-Phase 1:
-make an application that is able to analyze and extract part of the information that is encoded in a volume formatted in EXT2 or FAT16
-
-Binary provided that has a disk volume 
-2 parameters: 1) operation to perform 2) binary file (EXT2 or FAT16)
-eg:
-./shooter <operation> <voulme_name>
-
-only consider /info in phase 1
-
 Goals:
 1) detect filesystem volume has 
 2) extract metadata  
 
 minimum error checking 
-TODO: Interface for FAT16 and EXT2
 
 Phase 2:
 2 parameters per command line: 1) operation (in this case, /find) 2)binary file with disk volume 3) file
@@ -33,11 +22,6 @@ group descriptors --> tells you where each part of the information in the block 
 then you need to go to the inode table, and the split up the information 
 first inode is the same for each block 
 inode 11 is only on the first block --> blockgroup 0
-
-FAT16
-if you have checked the documenation, the directory entry structure --> the file names only have 8 chars --> fat 16 limitation
-5 chars for filename, 3 for extension
-
 
 Phase 3:
 

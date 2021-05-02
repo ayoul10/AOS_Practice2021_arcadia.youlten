@@ -33,6 +33,14 @@ using namespace std;
 #define GROUPFRAG 36
 #define VOLNAME 16
 
+//=========== FIND DEFINES ===============================
+#define ROOT_INODE_SUPERBLOCK 44
+#define INODE_TABLE_OFFSET 8
+#define FILESIZE_OFFSET 4
+#define NAME_OFFSET 8
+#define BLOCK_ARRAY 12
+#define READABLE 1
+
 class FileExt2
 {
 public:
