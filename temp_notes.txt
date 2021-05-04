@@ -12,18 +12,9 @@ eg:
 Goals:
 1) find the file in the root directory of the system and display its size (the (filename))
 
-Ext2
-we need to use inodes to get some certain information
-Every volume is split in block groups
-every x bytes, there's a block group (fixed size)
-each block has a specific pattern of information in it
-We have to read the info from the super block
-group descriptors --> tells you where each part of the information in the block is
-then you need to go to the inode table, and the split up the information 
-first inode is the same for each block 
-inode 11 is only on the first block --> blockgroup 0
-
 Phase 3:
+we don't care about indirect data blocks 
+Ext2 is the same as the current implementation, but slightly different
 
 Goals:
 1) just like phase 2, except we want to find a file in any directory
