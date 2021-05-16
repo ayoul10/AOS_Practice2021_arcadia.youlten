@@ -106,8 +106,6 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
         k = 0;
         filewewant[8] = '\0';
         fileextension[3] = '\0';
-        //printf("filewewant: %s \n", filewewant);
-        //printf("fileextension: %s \n", fileextension);
 
         if ((attribute == 0xF) || (filewewant[0] == '.') || (strcmp(filewewant, "..") == 0))
         {
@@ -116,15 +114,12 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
         else if ((attribute == 0x10))
         {
             rewind(disk);
-            printf("Directory: %s \n", filewewant);
             clus = clus - 2;
             int new_directory_offset = (clus * cluster_size) + data_start;
-            printf("new offset = : %d \n", new_directory_offset);
             //THERE'S A BUNCH OF JUNK INBETWEEN
             //fclose(disk);
             if (!findFile(diskname, filename, new_directory_offset, cluster_size, data_start))
             {
-                printf("File not found in directory %s \n", filewewant);
                 j = 0;
                 k = 0;
                 dot = 0;
@@ -163,7 +158,6 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
                 }
             }
 
-            printf("File we found: %s \n", namewithextension);
             j = 0;
             k = 0;
 
@@ -198,8 +192,6 @@ void FileFat16::findFat16File(char *filename, char *diskname)
     int root_dir_size = (f.max_root * 32);
     int data_start = firstrootdirsecnum + root_dir_size;
     int cluster_size = f.sector_size * f.sectors_per_cluster;
-
-    std::cout << "Root size " << firstrootdirsecnum << endl;
 
     //conver filename to upper case so we can compare it
 
