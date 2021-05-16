@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Launch",
+            "args": [],
+            "program": "${workspaceFolder}/shooter",
+            "windows": {
+                "program": "${workspaceFolder}/shooter"
+            },
+            "cwd": "${workspaceFolder}",
+            "stopOnEntry": false
+        }
+    ]
+}

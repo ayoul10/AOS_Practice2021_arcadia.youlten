@@ -10,8 +10,9 @@
 #include <fstream>
 #include <string.h>
 #include <strings.h>
+#include <math.h>
 #include "FileManager.h"
-using namespace std;
+//using namespace std;
 
 //=============== INFO DEFINES ================================
 #define BS_OEMNAME_OFFSET 3
@@ -34,7 +35,7 @@ using namespace std;
 //===================== FIND DEFINES ============================
 #define MAX_ROOT_DIRECTORY 512
 #define MAX_DIRECTORY_ENTRY 32
-#define FILE_SIZE_OFFSET 16
+#define START_CLUSTER_OFFSET 14
 #define FILE_SIZE_SIZE 4
 
 class FileFat16
