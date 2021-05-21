@@ -43,6 +43,7 @@ class FileFat16
 public:
     static Fat16 putFileInfoOnObjectFat16(char *filename);
     static void findFat16File(char * filename, char * diskname);
+    static void deleteFat16FileFromDisk(char *filename, char *diskname);
 };
 
 #endif

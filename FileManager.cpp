@@ -75,6 +75,24 @@ void findFileonDisk(char * diskname, char * filename){
     }
 }
 
+void deleteFileFromDisk(char *diskname, char *filename)
+{
+
+    int filetype = fileTypeCheck(diskname);
+    if (filetype == FAT16)
+    {
+        FileFat16::deleteFat16FileFromDisk(filename, diskname);
+    }
+    else if (filetype == EXT2)
+    {
+        FileExt2::deleteExt2FileFromDisk(filename, diskname);
+    }
+    else
+    {
+        cout << "Ending Program Due to Errors" << endl;
+    }
+}
+
 void cleanString(char *string){
 
     for(int i=0; i<sizeof(string); i++){

@@ -239,4 +239,7 @@ void FileExt2::findExt2File(char *filename, char *diskname)
     int found = findFile(diskname, filename, inode_number, block_group_offset);
 }
 
-
+void FileExt2::deleteExt2FileFromDisk(char *filename, char *diskname)
+{
+    std::cout << "Not Implemented Yet" << endl;
+}

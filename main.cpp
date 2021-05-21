@@ -28,7 +28,10 @@ int main(int argc, char *argv[])
 
         }
         else if (strcmp(argv[1], DELETE) == 0){
-            cout << "Not Implemented Yet" << endl;
+            deleteFileFromDisk(argv[2], argv[3]);
+        }
+        else{
+            cout << "Command Unknown, Please enter /info, /find, or /delete" << endl;
         }
     }
 

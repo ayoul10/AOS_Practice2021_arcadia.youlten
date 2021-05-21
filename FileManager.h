@@ -32,5 +32,6 @@ int fileTypeCheck(char *filename);
 void showDiskInfo(char *filename);
 void findFileonDisk(char *diskname, char *filename);
 void cleanString (char* string);
+void deleteFileFromDisk(char *diskname, char *filename);
 
 #endif
