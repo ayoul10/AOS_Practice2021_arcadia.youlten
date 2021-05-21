@@ -68,7 +68,7 @@ void findFileonDisk(char * diskname, char * filename){
     }
     else if (filetype == EXT2)
     {
-        FileExt2::findExt2File(filename, diskname);
+        FileExt2::findExt2File(filename, diskname, remove);
     }
     else
     {
@@ -87,7 +87,7 @@ void deleteFileFromDisk(char *diskname, char *filename)
     }
     else if (filetype == EXT2)
     {
-        FileExt2::findExt2File(filename, diskname);
+        FileExt2::findExt2File(filename, diskname, remove);
     }
     else
     {

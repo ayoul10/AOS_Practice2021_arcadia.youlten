@@ -40,13 +40,24 @@ using namespace std;
 #define NAME_OFFSET 8
 #define BLOCK_ARRAY 12
 #define READABLE 1
+//=========== DELETE DEFINES ===============================
+
 
 class FileExt2
 {
 public:
     static Ext2 putFileInfoOnObjectExt2(char *filename);
-    static void findExt2File(char *filename, char *diskname);
-    static void deleteExt2FileFromDisk(char *filename, char *diskname);
+    static void findExt2File(char *filename, char *diskname, int remove);
 };
+
+struct storage_for_inodes
+{
+    int inode;
+    short rec_length;
+    char name_len;
+    char file_type;
+    char name[255];
+};
+
 
 #endif
