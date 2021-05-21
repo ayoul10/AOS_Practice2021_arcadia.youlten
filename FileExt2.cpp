@@ -106,47 +106,51 @@ Ext2 FileExt2::putFileInfoOnObjectExt2(char *filename)
 
     return ext2;
 }
-void FileExt2::findExt2File(char *filename, char *diskname)
+
+int findFile(char *diskname, char *filename, int inode_number, int block_group_offset)
 {
+
     Ext2 f = FileExt2::putFileInfoOnObjectExt2(diskname);
+    int bg_inode_table;
     FILE *disk;
     int numerical_block_size = 1024 << f.blocksize;
+    //superblock = offset past the superblock
+    //numerical block size = skip first block that we're not interested in
+    //inode table offset --> offset we need to read to determine the offset of the inode table
+    int base_offset = SUPERBLOCK + INODE_TABLE_OFFSET + numerical_block_size;
     int filesize;
     int flag = 0;
     int dot = 0;
-
-    for (int j = 0; filename[j] != '\0'; j++)
-    {
-        if (filename[j] >= 'A' && filename[j] <= 'Z')
-        {
-            filename[j] = filename[j] + 32;
-        }
-    }
-
-    int j=0;
-    int bg_inode_table;
-    int inode_number;
-
     disk = fopen(diskname, "r");
 
-    //root directory inode = inode 2
-    fseek(disk, SUPERBLOCK + INODE_TABLE_OFFSET + numerical_block_size, SEEK_SET);
+    //determine the block group number of the inode we want to reach
+    int block_group_number = (inode_number -1 ) / f.inodespergroup;
+    //get the inode's index within the block group 
+    int local_inode_offset = ((inode_number - 1) % f.inodespergroup);
+
+    //READ THE Locatoin OF THE INODE TABLE
+    fseek(disk, block_group_offset, SEEK_SET);
     fread(&bg_inode_table, sizeof(int), 1, disk);
     rewind(disk);
+    //this determines the offset of the inode table within the block group we want
 
-    int inode_table_start = bg_inode_table * numerical_block_size;
-    int root_inode_offset = (f.firstinode-1) * f.inodesize;
-    //for now, this works since we're in the root directory
-    //int root_inode_offset = (2- 1) * f.inodesize;t
+    //BLOCK GROUP OFFSET IS CORRECT
+
+    int block_group_start = 0;
+    //Calculate the required block group
+    block_group_start = (bg_inode_table * numerical_block_size) + (block_group_number * numerical_block_size * f.groupblock);
+
+    int inode_table_offset = (local_inode_offset) * f.inodesize;
+
     int root_inode_block;
     int blocks_for_inode;
 
-    fseek(disk, inode_table_start + root_inode_offset + 40, SEEK_SET);
+    //GET THE BLOCK WHERE THIS INFORMATION IS STORED
+    fseek(disk, block_group_start + inode_table_offset + INODESGROUP, SEEK_SET);
     fread(&root_inode_block, sizeof(int), 1, disk);
     rewind(disk);
 
-    root_inode_block--;
-
+    //get PURE byte offset for this file
     int file_offset = root_inode_block * numerical_block_size;
 
     //we're at the start of the file
@@ -156,8 +160,8 @@ void FileExt2::findExt2File(char *filename, char *diskname)
     char name_len;
     char file_type;
     char name[255];
-    int rec_length_counter=0;
-    int found=0;
+    int rec_length_counter = 0;
+    int found = 0;
 
     while (rec_length_counter < numerical_block_size)
     {
@@ -170,7 +174,27 @@ void FileExt2::findExt2File(char *filename, char *diskname)
         fread(&file_type, sizeof(char), 1, disk);
         fread((name), sizeof(name), 1, disk);
 
-        if (strcmp(name, filename) == 0)
+        if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0 || inode == 11)
+        {
+            found = 0;
+        }
+        else if (file_type == 2)
+        {
+            int new_inode_local_offset = ((inode - 1) % f.inodespergroup);
+            int block_group = ((inode - 1) / f.inodespergroup);
+            int new_block_offset = base_offset + (block_group * numerical_block_size * f.groupblock);
+            int directory_inode = inode;
+            if (findFile(diskname, filename, inode, new_block_offset) == 0)
+            {
+                found = 0; 
+            }
+            else
+            {
+               return found = 1;
+               break;
+            }
+        }
+        else if (strcmp(name, filename) == 0)
         {
             found = 1;
             break;
@@ -179,22 +203,40 @@ void FileExt2::findExt2File(char *filename, char *diskname)
         rec_length_counter += rec_length;
         rewind(disk);
     }
-    if (file_type != READABLE)
-    {
-        printf("Input found, but it is not a file\n");
-    }
-    else if (found == 1)
+    if (found == 1)
     {
         int inode_we_want = (inode - 1) * f.inodesize;
-        fseek(disk, inode_table_start + inode_we_want + 4, SEEK_SET);
+        fseek(disk, block_group_start + inode_we_want + 4, SEEK_SET);
         fread(&filesize, sizeof(int), 1, disk);
         rewind(disk);
 
         printf("File Found. it has %d number of bytes\n", filesize);
+        return 1;
     }
     else
     {
         cout << "Unknown File " << endl;
+        return 0;
+    }
+}
+
+void FileExt2::findExt2File(char *filename, char *diskname)
+{
+    int numerical_block_size = 1024;
+    for (int j = 0; filename[j] != '\0'; j++)
+    {
+        if (filename[j] >= 'A' && filename[j] <= 'Z')
+        {
+            filename[j] = filename[j] + 32;
+        }
     }
 
+    int j=0;
+    int inode_number = 2;
+    int block_group_offset = SUPERBLOCK + INODE_TABLE_OFFSET + numerical_block_size;
+    int root =1;
+
+    int found = findFile(diskname, filename, inode_number, block_group_offset);
 }
+
+
