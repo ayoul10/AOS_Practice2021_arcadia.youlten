@@ -46,7 +46,6 @@ class FileExt2
 public:
     static Ext2 putFileInfoOnObjectExt2(char *filename);
     static void findExt2File(char *filename, char *diskname);
-    static void findExt2File(char *filename, char *diskname);
     static void deleteExt2FileFromDisk(char *filename, char *diskname);
 };
 

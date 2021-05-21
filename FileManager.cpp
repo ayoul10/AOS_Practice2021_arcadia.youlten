@@ -63,7 +63,7 @@ void findFileonDisk(char * diskname, char * filename){
     int filetype = fileTypeCheck(diskname);
     if (filetype == FAT16)
     {
-        FileFat16::findFat16File(filename, diskname);
+        bool result = FileFat16::findFat16File(filename, diskname);
     }
     else if (filetype == EXT2)
     {

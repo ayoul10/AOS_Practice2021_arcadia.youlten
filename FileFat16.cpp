@@ -69,7 +69,7 @@ Fat16 FileFat16::putFileInfoOnObjectFat16(char *filename)
 
 //first cluster * sector size * sector count
 
-bool findFile(char *diskname, char *filename, int directory_offset, int cluster_size, int data_start)
+int findFile(char *diskname, char *filename, int directory_offset, int cluster_size, int data_start)
 {
     char filewewant[9];
     char fileextension[4];
@@ -183,7 +183,7 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
     return flag =0;
 }
 
-void FileFat16::findFat16File(char *filename, char *diskname)
+bool FileFat16::findFat16File(char *filename, char *diskname)
 {
     Fat16 f = FileFat16::putFileInfoOnObjectFat16(diskname);
     int i=0;
@@ -206,11 +206,24 @@ void FileFat16::findFat16File(char *filename, char *diskname)
     if (!findFile(diskname, filename, firstrootdirsecnum, cluster_size, data_start))
     {
         std::cout << "Could not find file on disk" << endl;
+        return false;
+    }
+    else{
+        return true;
     }
 
 }
 
 void FileFat16::deleteFat16FileFromDisk(char *filename, char *diskname)
 {
-    std::cout << "In progress" << endl;
+    Fat16 f = FileFat16::putFileInfoOnObjectFat16(diskname);
+
+    if (FileFat16::findFat16File(filename, diskname))
+    {
+        std::cout << "We done it" << endl;
+    }
+    else
+    {
+        std::cout << "Could not delete unknown file" << endl;
+    }
 }
