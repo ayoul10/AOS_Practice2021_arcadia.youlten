@@ -69,7 +69,7 @@ Fat16 FileFat16::putFileInfoOnObjectFat16(char *filename)
 
 //first cluster * sector size * sector count
 
-bool findFile(char *diskname, char *filename, int directory_offset, int cluster_size, int data_start)
+int findFile(char *diskname, char *filename, int directory_offset, int cluster_size, int data_start, int remove)
 {
     char filewewant[9];
     char fileextension[4];
@@ -82,7 +82,7 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
     unsigned short clus = 0;
     FILE *disk;
 
-    disk = fopen(diskname, "r");
+    disk = fopen(diskname, "r+");
 
     while (filewewant[0] != 0x00)
     {
@@ -118,7 +118,7 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
             int new_directory_offset = (clus * cluster_size) + data_start;
             //THERE'S A BUNCH OF JUNK INBETWEEN
             //fclose(disk);
-            if (!findFile(diskname, filename, new_directory_offset, cluster_size, data_start))
+            if (!findFile(diskname, filename, new_directory_offset, cluster_size, data_start, remove))
             {
                 j = 0;
                 k = 0;
@@ -163,10 +163,22 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
 
             if (strcmp(filename, namewithextension) == 0)
             {
-                //fseek(disk, FILE_SIZE_OFFSET + 1, SEEK_CUR);
-                fread(&filesize, sizeof(int), 1, disk);
+                if (remove == 1)
+                {
+                    char test = 0xE5; 
+                    rewind(disk);
+                    fseek(disk, directory_offset + i, SEEK_SET);
+                    printf("Offset: %d  \n", directory_offset + i);
+                    fwrite(&test, sizeof(char), sizeof(char), disk);
+                    printf("The file %s file has been deleted \n", namewithextension);
+                }
+                else{
+                    //fseek(disk, FILE_SIZE_OFFSET + 1, SEEK_CUR);
+                    fread(&filesize, sizeof(int), 1, disk);
 
-                printf("File Found. it has %d number of bytes\n", filesize);
+                    printf("File Found. it has %d number of bytes\n", filesize);
+                }
+               
                 fclose(disk);
 
                 return flag = 1;
@@ -183,7 +195,7 @@ bool findFile(char *diskname, char *filename, int directory_offset, int cluster_
     return flag =0;
 }
 
-void FileFat16::findFat16File(char *filename, char *diskname)
+bool FileFat16::findFat16File(char *filename, char *diskname, int remove)
 {
     Fat16 f = FileFat16::putFileInfoOnObjectFat16(diskname);
     int i=0;
@@ -192,6 +204,7 @@ void FileFat16::findFat16File(char *filename, char *diskname)
     int root_dir_size = (f.max_root * 32);
     int data_start = firstrootdirsecnum + root_dir_size;
     int cluster_size = f.sector_size * f.sectors_per_cluster;
+
 
     //conver filename to upper case so we can compare it
 
@@ -203,14 +216,29 @@ void FileFat16::findFat16File(char *filename, char *diskname)
         }
     }
     //!findFile(diskname, filename, firstrootdirsecnum, i=64) &&
-    if (!findFile(diskname, filename, firstrootdirsecnum, cluster_size, data_start))
+    if (!findFile(diskname, filename, firstrootdirsecnum, cluster_size, data_start, remove))
     {
         std::cout << "Could not find file on disk" << endl;
+        return false;
+    }
+    else{
+        return true;
     }
 
 }
 
 void FileFat16::deleteFat16FileFromDisk(char *filename, char *diskname)
 {
-    std::cout << "Not Implemented Yet" << endl;
+    Fat16 f = FileFat16::putFileInfoOnObjectFat16(diskname);
+    //delete just indicates that we want to delete a file when we find it
+    int remove = 1;
+    if (FileFat16::findFat16File(filename, diskname, remove))
+    {
+
+        std::cout << "File Removed" << endl;
+    }
+    else
+    {
+        std::cout << "Could not delete unknown file" << endl;
+    }
 }

@@ -61,9 +61,10 @@ void showDiskInfo(char * filename){
 void findFileonDisk(char * diskname, char * filename){
 
     int filetype = fileTypeCheck(diskname);
+    int remove=0;
     if (filetype == FAT16)
     {
-        FileFat16::findFat16File(filename, diskname);
+        bool result = FileFat16::findFat16File(filename, diskname, remove);
     }
     else if (filetype == EXT2)
     {
@@ -79,13 +80,14 @@ void deleteFileFromDisk(char *diskname, char *filename)
 {
 
     int filetype = fileTypeCheck(diskname);
+    int remove = 1;
     if (filetype == FAT16)
     {
-        FileFat16::deleteFat16FileFromDisk(filename, diskname);
+        bool result = FileFat16::findFat16File(filename, diskname, remove);
     }
     else if (filetype == EXT2)
     {
-        FileExt2::deleteExt2FileFromDisk(filename, diskname);
+        FileExt2::findExt2File(filename, diskname);
     }
     else
     {
