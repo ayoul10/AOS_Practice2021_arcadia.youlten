@@ -23,7 +23,9 @@ int main(int argc, char *argv[])
             showDiskInfo(argv[2]);
         }
         else if (strcmp(argv[1], FIND) == 0){
+            //when running FAT16, a message that displays the root size appears. I don't know where this message is coming from.
             findFileonDisk(argv[2], argv[3]);
+
         }
         else if (strcmp(argv[1], DELETE) == 0){
             cout << "Not Implemented Yet" << endl;
