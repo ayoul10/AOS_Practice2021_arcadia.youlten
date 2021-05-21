@@ -212,5 +212,5 @@ void FileFat16::findFat16File(char *filename, char *diskname)
 
 void FileFat16::deleteFat16FileFromDisk(char *filename, char *diskname)
 {
-    std::cout << "Not Implemented Yet" << endl;
+    std::cout << "In progress" << endl;
 }
