@@ -115,6 +115,7 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
     int bg_inode_table;
     FILE *disk;
     int numerical_block_size = 1024 << f.blocksize;
+    int block_numbers_array[12];
     //superblock = offset past the superblock
     //numerical block size = skip first block that we're not interested in
     //inode table offset --> offset we need to read to determine the offset of the inode table
@@ -146,13 +147,21 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
     int root_inode_block;
     int blocks_for_inode;
 
-    //GET THE BLOCK WHERE THIS INFORMATION IS STORED
-    fseek(disk, block_group_start + inode_table_offset + INODESGROUP, SEEK_SET);
-    fread(&root_inode_block, sizeof(int), 1, disk);
+    //get the number of blocks reserved for this inode
+    fseek(disk, block_group_start + inode_table_offset + BLOCK_INODES, SEEK_SET);
+    fread(&blocks_for_inode, sizeof(int), 1, disk);
     rewind(disk);
 
+    int file_offsets[12];
+
+    for (int m = 0; m < blocks_for_inode; m++)
+    {
+        fseek(disk, block_group_start + inode_table_offset + (INODESGROUP + (m*4)), SEEK_SET);
+        fread(&block_numbers_array[m], sizeof(int), 1, disk);
+        rewind(disk);
+        file_offsets[m] = block_numbers_array[m] * numerical_block_size;
+    }
     //get PURE byte offset for this file
-    int file_offset = root_inode_block * numerical_block_size;
 
     //we're at the start of the file
     int test;
@@ -162,98 +171,110 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
     char name_len;
     char file_type;
     char name[255];
-    int rec_length_counter = 0;
+    int current_block=0;
+    
     int found = 0;
     int mod_counter =0;
+    int block_counter = 0;
+    int rec_length_counter=0;
 
-    while (rec_length_counter < numerical_block_size)
-    {
-        cleanString(name);
-
-        fseek(disk, file_offset + rec_length_counter, SEEK_SET);
-        fread(&inode, sizeof(int), 1, disk);
-        fread(&rec_length, sizeof(short), 1, disk);
-        fread(&name_len, sizeof(char), 1, disk);
-        fread(&file_type, sizeof(char), 1, disk);
-        fread((name), sizeof(name), 1, disk);
-
-        if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0 || inode == 11)
+    for(block_counter=0; block_counter < blocks_for_inode && found !=1 && block_numbers_array[block_counter]!=0; block_counter++){
+        rec_length_counter = 0;
+        while (rec_length_counter < numerical_block_size && found != 1)
         {
-            found = 0;
-        }
-        else if (file_type == 2)
-        {
-            int new_inode_local_offset = ((inode - 1) % f.inodespergroup);
-            int block_group = ((inode - 1) / f.inodespergroup);
-            int new_block_offset = base_offset + (block_group * numerical_block_size * f.groupblock);
-            int directory_inode = inode;
-            if (findFile(diskname, filename, inode, new_block_offset, remove) == 0)
+            cleanString(name);
+
+            fseek(disk, file_offsets[block_counter] + rec_length_counter, SEEK_SET);
+            fread(&inode, sizeof(int), 1, disk);
+            fread(&rec_length, sizeof(short), 1, disk);
+            fread(&name_len, sizeof(char), 1, disk);
+            fread(&file_type, sizeof(char), 1, disk);
+            fread((name), sizeof(name), 1, disk);
+            current_block = block_counter;
+
+            if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0 || inode == 11)
             {
-                return found = 0; 
+                found = 0;
+            }
+            else if (file_type == 2){
+
+                int new_inode_local_offset = ((inode - 1) % f.inodespergroup);
+                int block_group = ((inode - 1) / f.inodespergroup);
+                int new_block_offset = base_offset + (block_group * numerical_block_size * f.groupblock);
+                int directory_inode = inode;
+                    if (findFile(diskname, filename, inode, new_block_offset, remove) == 0)
+                    {
+                        found = 0;
+                    }
+                    else
+                    {
+                        return found = 1;
+                        break;
+                    }
+                
+            }
+            else if (strcmp(name, filename) == 0)
+            {
+                found = 1;
+                inode_storage[mod_counter % 2].inode = inode;
+                inode_storage[mod_counter % 2].rec_length = rec_length;
+                inode_storage[mod_counter % 2].name_len = name_len;
+                inode_storage[mod_counter % 2].file_type = file_type;
+                inode_storage[mod_counter % 2].block_number = block_counter;
+                cleanString(inode_storage[mod_counter % 2].name);
+                strcpy(inode_storage[mod_counter % 2].name, name);
                 break;
             }
-            else
-            {
-               return found = 1;
-               break;
-            }
-        }
-        else if (strcmp(name, filename) == 0)
-        {
-            found = 1;
+
             inode_storage[mod_counter % 2].inode = inode;
             inode_storage[mod_counter % 2].rec_length = rec_length;
+            inode_storage[mod_counter % 2].block_number = block_counter;
             inode_storage[mod_counter % 2].name_len = name_len;
             inode_storage[mod_counter % 2].file_type = file_type;
             cleanString(inode_storage[mod_counter % 2].name);
             strcpy(inode_storage[mod_counter % 2].name, name);
-            
-            break;
+            rec_length_counter += rec_length;
+            mod_counter++;
+            rewind(disk);
         }
-
-        inode_storage[mod_counter % 2].inode = inode;
-        inode_storage[mod_counter % 2].rec_length = rec_length;
-        inode_storage[mod_counter % 2].name_len = name_len;
-        inode_storage[mod_counter % 2].file_type = file_type;
-        cleanString(inode_storage[mod_counter % 2].name);
-        strcpy(inode_storage[mod_counter % 2].name, name);
-
-        rec_length_counter += rec_length;
-        mod_counter++;
-
-        rewind(disk);
-       
     }
     if (found == 1)
     {
         if (remove == 1){
-           
-            short total_rec_length = inode_storage[(mod_counter-1) % 2].rec_length + rec_length;
 
-            short previous_entry = rec_length_counter - inode_storage[(mod_counter - 1) % 2].rec_length;
-            fseek(disk, file_offset + previous_entry, SEEK_SET);
-            fread(&junk, sizeof(int), 1, disk);
-            fwrite(&total_rec_length, sizeof(short), 1, disk);
-
-            //get rec_length of the current one
-            //add it to the previous one
-            //check if it's the first file;
             rewind(disk);
-            printf("The file %s file has been deleted \n", name);
+            if (inode_storage[mod_counter % 2].block_number == inode_storage[(mod_counter-1) % 2].block_number)
+            {
+
+                short rec_length_to_override = rec_length_counter + inode_storage[mod_counter % 2].rec_length;
+                short previous_entry = rec_length_counter - inode_storage[(mod_counter - 1) % 2].rec_length;
+                fseek(disk, file_offsets[block_counter - 1] + previous_entry, SEEK_SET);
+                fread(&junk, sizeof(int), 1, disk);
+                fwrite(&rec_length_to_override, sizeof(short), 1, disk);
+
+            }
+            else{
+
+                printf("we do be lookin at %s doe \n", name);
+            }
+
+            rewind(disk);
+
+            printf("The file %s has been deleted \n", name);
         }
         else{
-            int inode_we_want = (inode - 1) * f.inodesize;
-            fseek(disk, block_group_start + inode_we_want + 4, SEEK_SET);
+            rewind(disk);
+            int inode_we_want = (((inode - 1) % f.inodespergroup)* f.inodesize);
+            fseek(disk, block_group_start+ inode_we_want + 4, SEEK_SET);
             fread(&filesize, sizeof(int), 1, disk);
             rewind(disk);
-
+            
             printf("File Found. it has %d number of bytes\n", filesize);
         }
         return 1; 
     }
     else
     {
-        cout << "Unknown File " << endl;
         return 0;
     }
 }
@@ -275,5 +296,8 @@ void FileExt2::findExt2File(char *filename, char *diskname, int remove)
     int root =1;
 
     int found = findFile(diskname, filename, inode_number, block_group_offset, remove);
+    if(found == 0){
+        cout << "Unknown File " << endl;
+    }
 }
 

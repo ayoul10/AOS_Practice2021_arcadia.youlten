@@ -40,8 +40,8 @@ using namespace std;
 #define NAME_OFFSET 8
 #define BLOCK_ARRAY 12
 #define READABLE 1
-//=========== DELETE DEFINES ===============================
-
+#define BLOCK_INODES 28
+#define BLOCK_INODE_SIZE 512
 
 class FileExt2
 {
@@ -57,6 +57,7 @@ struct storage_for_inodes
     char name_len;
     char file_type;
     char name[255];
+    int block_number;
 };
 
 
