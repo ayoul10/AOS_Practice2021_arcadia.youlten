@@ -238,6 +238,7 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
             rewind(disk);
         }
     }
+    //TODO FIX THE HANGING WITH THE FILE DELETION
     if (found == 1)
     {
         if (remove == 1){
@@ -245,17 +246,40 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
             rewind(disk);
             if (inode_storage[mod_counter % 2].block_number == inode_storage[(mod_counter-1) % 2].block_number)
             {
-
                 short rec_length_to_override = rec_length_counter + inode_storage[mod_counter % 2].rec_length;
                 short previous_entry = rec_length_counter - inode_storage[(mod_counter - 1) % 2].rec_length;
                 fseek(disk, file_offsets[block_counter - 1] + previous_entry, SEEK_SET);
                 fread(&junk, sizeof(int), 1, disk);
                 fwrite(&rec_length_to_override, sizeof(short), 1, disk);
-
             }
             else{
 
-                printf("we do be lookin at %s doe \n", name);
+                cleanString(name);
+
+                int old_rec_length = rec_length_counter;
+                rec_length_counter += rec_length;
+
+                int new_inode;
+                short new_rec_length;
+                char new_name_len;
+                char new_file_type;
+                char new_name[255];
+
+                fseek(disk, file_offsets[block_counter] + rec_length_counter, SEEK_SET);
+                fread(&new_inode, sizeof(int), 1, disk);
+                fread(&new_rec_length, sizeof(short), 1, disk);
+                fread(&new_name_len, sizeof(char), 1, disk);
+                fread(&new_file_type, sizeof(char), 1, disk);
+                fread((new_name), sizeof(new_name), 1, disk);
+
+                rewind(disk);
+
+                fseek(disk, file_offsets[block_counter-1] + old_rec_length, SEEK_SET);
+                fwrite(&inode, sizeof(int), 1, disk);
+                fwrite(&rec_length, sizeof(short), 1, disk);
+                fwrite(&name_len, sizeof(char), 1, disk);
+                fwrite(&file_type, sizeof(char), 1, disk);
+                fwrite((new_name), sizeof(new_name), 1, disk);
             }
 
             rewind(disk);
