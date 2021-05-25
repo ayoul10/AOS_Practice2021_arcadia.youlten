@@ -172,17 +172,19 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
     char file_type;
     char name[255];
     int current_block=0;
+    int trash; 
     
     int found = 0;
     int mod_counter =0;
     int block_counter = 0;
     int rec_length_counter=0;
 
-    for(block_counter=0; block_counter < blocks_for_inode && found !=1 && block_numbers_array[block_counter]!=0; block_counter++){
+    for(block_counter=0; block_counter < blocks_for_inode && found !=1 ; block_counter++){
         rec_length_counter = 0;
-        while (rec_length_counter < numerical_block_size && found != 1)
+        while (rec_length_counter < numerical_block_size && found != 1 && block_numbers_array[block_counter] != 0)
         {
             cleanString(name);
+            name_len=0;
 
             fseek(disk, file_offsets[block_counter] + rec_length_counter, SEEK_SET);
             fread(&inode, sizeof(int), 1, disk);
@@ -190,7 +192,12 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
             fread(&name_len, sizeof(char), 1, disk);
             fread(&file_type, sizeof(char), 1, disk);
             fread((name), sizeof(name), 1, disk);
+            name[sizeof(name)] = '\0';
             current_block = block_counter;
+
+            printf("rec_len: %d \n", rec_length);
+            printf("current block: %d \n", block_numbers_array[block_counter]);
+            printf("Comparing |%s| and |%s| == %d \n", name, filename, strcmp(name, filename));
 
             if (strcmp(name, ".") == 0 || strcmp(name, "..") == 0 || inode == 11)
             {
@@ -223,8 +230,6 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
                 inode_storage[mod_counter % 2].block_number = block_counter;
                 cleanString(inode_storage[mod_counter % 2].name);
                 strcpy(inode_storage[mod_counter % 2].name, name);
-                printf("name: %s \n", name);
-                printf("rec_len: %d \n", rec_length);
                 break;
             }
 
@@ -308,13 +313,6 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
 void FileExt2::findExt2File(char *filename, char *diskname, int remove)
 {
     int numerical_block_size = 1024;
-    for (int j = 0; filename[j] != '\0'; j++)
-    {
-        if (filename[j] >= 'A' && filename[j] <= 'Z')
-        {
-            filename[j] = filename[j] + 32;
-        }
-    }
 
     int j=0;
     int inode_number = 2;
