@@ -165,7 +165,7 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
 
     //we're at the start of the file
     int test;
-    int junk;
+    int junk=0;
     int inode;
     short rec_length;
     char name_len;
@@ -223,6 +223,8 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
                 inode_storage[mod_counter % 2].block_number = block_counter;
                 cleanString(inode_storage[mod_counter % 2].name);
                 strcpy(inode_storage[mod_counter % 2].name, name);
+                printf("name: %s \n", name);
+                printf("rec_len: %d \n", rec_length);
                 break;
             }
 
@@ -233,6 +235,8 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
             inode_storage[mod_counter % 2].file_type = file_type;
             cleanString(inode_storage[mod_counter % 2].name);
             strcpy(inode_storage[mod_counter % 2].name, name);
+            printf("name: %s \n", name);
+            printf("rec_len: %d \n", rec_length);
             rec_length_counter += rec_length;
             mod_counter++;
             rewind(disk);
@@ -246,15 +250,13 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
             rewind(disk);
             if (inode_storage[mod_counter % 2].block_number == inode_storage[(mod_counter-1) % 2].block_number)
             {
-                short rec_length_to_override = rec_length_counter + inode_storage[mod_counter % 2].rec_length;
+                short rec_length_to_override = inode_storage[(mod_counter - 1) % 2].rec_length + inode_storage[mod_counter % 2].rec_length;
                 short previous_entry = rec_length_counter - inode_storage[(mod_counter - 1) % 2].rec_length;
                 fseek(disk, file_offsets[block_counter - 1] + previous_entry, SEEK_SET);
-                fread(&junk, sizeof(int), 1, disk);
+                fwrite(&junk, sizeof(int), 1, disk);
                 fwrite(&rec_length_to_override, sizeof(short), 1, disk);
             }
             else{
-
-                cleanString(name);
 
                 int old_rec_length = rec_length_counter;
                 rec_length_counter += rec_length;
@@ -275,10 +277,10 @@ int findFile(char *diskname, char *filename, int inode_number, int block_group_o
                 rewind(disk);
 
                 fseek(disk, file_offsets[block_counter-1] + old_rec_length, SEEK_SET);
-                fwrite(&inode, sizeof(int), 1, disk);
-                fwrite(&rec_length, sizeof(short), 1, disk);
-                fwrite(&name_len, sizeof(char), 1, disk);
-                fwrite(&file_type, sizeof(char), 1, disk);
+                fwrite(&new_inode, sizeof(int), 1, disk);
+                fwrite(&new_rec_length, sizeof(short), 1, disk);
+                fwrite(&new_name_len, sizeof(char), 1, disk);
+                fwrite(&new_file_type, sizeof(char), 1, disk);
                 fwrite((new_name), sizeof(new_name), 1, disk);
             }
 

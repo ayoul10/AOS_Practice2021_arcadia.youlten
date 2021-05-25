@@ -50,7 +50,7 @@ this was important, as it let me catch some mistakes in my program that I would 
 
 Overall, this practice had a good level of difficulty. Most of the problems encountered were due to a lack of understanding the file system structure, so many problems were solved naturally as understanding increased. 
 For example, when doing Fat16 in phase 3, I was able to recurse and traverse each directory correctly, however, my program kept ending because I was findnig strange files. I was stuck on this problem for quite a long time, as I didn't realize these "strange files" had flags that indicated they were different from normal directory entries. Once I added a check for these files in order to skip them, my project functioned flawlessly. 
-Phase 3 ext2 was really hard
+Phase 4 Ext2 was the most challenging, as 
 A similar problem occured with Ext2 in phase 3. Although not conceptually difficult, in phase 2 I did not make many comments in my code, and I had named some variables incorrecctly. That meant that converting between a "root-only" traversal and a full system-wide traversal was a bit difficult. I had to take a bit more time on this phase in order to reorganize code, rename variables, and properly understand how full directory traversal worked. Once I did this, I was quickly able to solve Phase 2. 
 
 Although the practice had a good difficulty level, I personally would have liked a bit more time between checkpoints. In addition to the other practices given by the university, having to deliver one phase each 2 weeks (approximately) meant that ocassionally, other projects with stricter deadlines had to be prioritized over this one. Perhaps 2-3 additional days would have alleviated this problem a bit. 
