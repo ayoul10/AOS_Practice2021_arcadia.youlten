@@ -75,10 +75,7 @@ In the Fat16 filesystem, deleting files is quite straightforward. In order to de
 Although not as straightforward as Fat16, deleting files is quite straightforward in Ext2 as well. To delete a file, the entry of the file before the one the user desires to delete should have its record length modified. The record length adjusted to the file's normal record length, and the record length of the file the user wants to delete. However, if the entry is the first entry in the block, then, the next entry should replace and overwrite the entry of the file that the user wants to delete. Just like in Fat16, I once again added a flag to the function call of FileExt2::findExt2File() and findFile() to indicate if the user wants to remove the file they're looking for or not. Once the file is found, the program navigates to the offset of the file, and replaces one of the offsets with the appropriate values. More detail about this section can be seen in the Data Structures section.
 
 ### Design
-
-In this project, I used the following design:
- PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
+ In this section, I will describe each class/module that is relevant to the code
  The Fat16/Ext2 class was used to maintain and manage the objects that contained the metadata of the system. 
  On the other hand, the FileExt2/FileFat16 classes prodivded the functionality of getting and displaying the information obtained from the files within the filesystem. It contains the functions 'putFileInfoOnObject' and 'findFile', which obtain the metadata for the file system, and find a file in a filesystem respectively. Normally, it might be better to put the parts of the code that display things on the cmd in another dedicated class. However, in this implementation, most of the 'view' functionality is a single print, so putting these single line code snippets in a dedicated class seemed over-engineered.
  
