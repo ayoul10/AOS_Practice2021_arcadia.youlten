@@ -19,11 +19,13 @@ The practice functions with Fat16 or Ext2 file systems.
 In this practice, we were required to find information and files on two different file systems: Fat16 and Ext2. 
 ### Fat16
 The Fat 16 file system has the following structure:
- PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+![Fat16_fileStruct](https://user-images.githubusercontent.com/45453703/119680676-b2644700-be41-11eb-8e89-8b24b5e61f28.png)
+
  
 The reserved region section contains internal and extenral metadata about the file directory, and a jump to the bootstrap code. For this implementation, the most important section is the internal metadata which is used in phase 1. 
- PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
+
+![Fat16metadata](https://user-images.githubusercontent.com/45453703/119680740-bf813600-be41-11eb-9151-77c3435b266f.png)
+
  In this practice, the File Allocation Table was not explored. However, it is a linked list of clusters. Each file and sub directory has an entry in this table.  
 
  The root directory contains all of the information needed to traverse the entire filesystem, however, the data region contains sub-directories with their own files. For example, let's say we have a root directory with 3 files and another directory inside. The entries in the root directory are 32 byte entries, which consists of metadata about the entry. The Data region contains the same information, however, in order to navigate to this section, the starting cluster of the directory entry you want to navigate to must be found first. 
@@ -31,7 +33,10 @@ The reserved region section contains internal and extenral metadata about the fi
  
 ### Ext2
 In the Ext2 file system, there are a number of important concepts. 
- PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+![Ext2_file_structure](https://user-images.githubusercontent.com/45453703/119680787-c7d97100-be41-11eb-864b-85516d5dcd15.png)
+
+
 The Ext2 partition is split into block groups, which all have the same size, and are stored one after another. Within these block groups are individual blocks, which contain information about a given file. In order to find the information of a particular file, its inode should first be found. An inode (index node) contains the metadata for a single file or directory on the system, indicating things like which block group it is in. 
 
 A more in depth explanation for what each section is used for can be seen in the following section.
@@ -90,22 +95,33 @@ In this project, I only used a handful of data structures. One thing I would do 
 
 #### Fat16
  In Fat16, I only used one data structure, which looks as follows:
- PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+![Fat16_data_struct](https://user-images.githubusercontent.com/45453703/119680949-ee97a780-be41-11eb-936c-387cc12c693e.png)
+
+
 This data structure was used to store all of the metadata about the disk volume. So, whenever the function FileFat16::putFileInfoOnObjectFat16() was called, the information about the disk could instantly be used. For example, when trying to find a file in Fat16, much of the information required to traverse to the "data" sector of the disk can be found in the metadata of the file. By storing this information in a datastructure in an object, retrieval of this information is efficient, saving time, and not requiring the program to run repetitive code. 
 For example, when calculating the initial offset for the root directory, a Fat16 object of the data structure is used as follows:
- PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+![Fat16_design_example](https://user-images.githubusercontent.com/45453703/119680983-f5261f00-be41-11eb-9159-0b640090159c.png)
+
  
  As you can see, we need those attributes in order to navigate to the root directory. This method saves time by avoiding repetitive code.
 
 #### Ext2
 
 Similarly to Fat16, I also created a data structure to store the information of the Ext2 metadata.
-PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+![Ext2_data_struct](https://user-images.githubusercontent.com/45453703/119681049-053dfe80-be42-11eb-9971-9beb03461347.png)
+
 Again, like Fat16, the information from FileExt2::putFileInfoOnObjectExt2() was stored on an object. This metadata was useful to access the appropriate offsets when needed. For example
-PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 
 However, unlike Fat16, I created a secondary datatype so I could store information about each inode:
-PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+![Ext2_data_struct_2](https://user-images.githubusercontent.com/45453703/119681124-12f38400-be42-11eb-981b-331c892766ff.png)
+
 This datatype was created purely for the "/delete" functionality of the project. Each time a directory is traversed, the information of the most recent file read is stored in one position of an array of this datatype. As explained in the "/delete" section, to "delete" a file in Ext2, we have to replace the previous file's record length with its current record length and the record length of the file we want to delete. By creating an array of two positions of this datatype, and then alternating the index with each loop, we are easily able to store not only the information of the file that we found, but also the information of the previous file. This allows us to easily delete the file by performing the override. 
 
 ### Tests Performed
@@ -126,7 +142,8 @@ Although the practice had a good difficulty level, I personally would have liked
 ### Temporal Estimation
 In total, I spent 70 hours on this project, divided as follows:
 
-PUT AN IMAGE HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+![Time Graph ](https://user-images.githubusercontent.com/45453703/119681149-18e96500-be42-11eb-9cd4-02d13907f016.png)
+
 
 1. Phase 1: 17 hours 
 2. Phase 2: 15 hours
