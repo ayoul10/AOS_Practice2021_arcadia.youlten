@@ -116,6 +116,7 @@ Similarly to Fat16, I also created a data structure to store the information of 
 
 Again, like Fat16, the information from FileExt2::putFileInfoOnObjectExt2() was stored on an object. This metadata was useful to access the appropriate offsets when needed. For example
 
+![image](https://user-images.githubusercontent.com/45453703/119681442-5e0d9700-be42-11eb-942b-f58df3a807ed.png)
 
 
 However, unlike Fat16, I created a secondary datatype so I could store information about each inode:
