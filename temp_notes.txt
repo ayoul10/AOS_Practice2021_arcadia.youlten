@@ -1,1 +1,0 @@
-wsl cmd: /mnt/c/Users/arcad/AOS_Practice_arcadia.youlten/AOS_Practice2021_arcadia.youlten
